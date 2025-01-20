@@ -14,7 +14,8 @@ class SaleController extends Controller
     {
 
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'admin') {
+        // if ($user_type == 'admin') {
+        if ($user_type) {
             $customer = DB::table('customer')->get();
             $item = DB::table('item')->where('item_status', 1)->where('item_stock', '>', 0)->get();
             // Fetch the last sale bill number

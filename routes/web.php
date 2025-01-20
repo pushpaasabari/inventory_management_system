@@ -2,10 +2,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('register');
-// });
-
 Route::get('/', [UserController::class, 'index']);
 Route::get('/index', [UserController::class, 'index']);
 Route::get('/login', [UserController::class, 'login']);
@@ -13,6 +9,8 @@ Route::post('/login', [UserController::class, 'login_post']);
 Route::get('/logout', [UserController::class, 'logout']);
 Route::get('/emp_registration', [UserController::class, 'emp_registration']);
 Route::post('/emp_registration', [UserController::class, 'emp_registration_post']);
+Route::get('/registration', [UserController::class, 'registration']);
+Route::post('/registration', [UserController::class, 'registration_post']);
 Route::get('/emp_list', [UserController::class, 'emp_list']);
 
 Route::get('/add_item', [InventoryController::class, 'add_item']);

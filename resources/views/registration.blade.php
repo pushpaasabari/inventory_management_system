@@ -22,7 +22,6 @@
                                 <form class="form-group" name="registration" id="registration"
                                     action="{{url('registration')}}" method="POST">
                                     {{ csrf_field() }}
-                                    {{ csrf_field() }}
                                     @if (Session::has('success'))
                                     <div class="alert alert-success">
                                         {{Session::get('success')}}

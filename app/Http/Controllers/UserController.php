@@ -14,19 +14,41 @@ class UserController extends Controller
 {
     public function index()
     {
+        // if (Session::has('session_id')) {
+        //     $sum_qty = DB::table('sale_item')
+        //         ->selectRaw('SUM(CAST("item_qty" AS numeric)) as total_qty')
+        //         ->value('total_qty');
+        //     $customer = DB::table('customer')
+        //         ->count();
+        //     $total_amount = DB::table('sale_item')
+        //         ->selectRaw('SUM(CAST("item_amount" AS numeric)) as total_amount')
+        //         ->value('total_amount');
+        //     $logs = DB::table('logs')->get();
+        //     $items = DB::table('item')->where('item_stock', '<', 10)->orderBy('item_stock', 'asc')->get();
+        //     return view('index', compact('sum_qty', 'total_amount', 'customer', 'logs', 'items'));
+        // } 
         if (Session::has('session_id')) {
             $sum_qty = DB::table('sale_item')
-                ->selectRaw('SUM(CAST("item_qty" AS numeric)) as total_qty')
+                ->selectRaw('SUM(CAST(item_qty AS DECIMAL)) as total_qty')
                 ->value('total_qty');
-            $customer = DB::table('customer')
-                ->count();
+                
+            $customer = DB::table('customer')->count();
+            
             $total_amount = DB::table('sale_item')
-                ->selectRaw('SUM(CAST("item_amount" AS numeric)) as total_amount')
+                ->selectRaw('SUM(CAST(item_amount AS DECIMAL)) as total_amount')
                 ->value('total_amount');
+                
             $logs = DB::table('logs')->get();
-            $items = DB::table('item')->where('item_stock', '<', 10)->orderBy('item_stock', 'asc')->get();
+            
+            $items = DB::table('item')
+                ->where('item_stock', '<', 10)
+                ->orderBy('item_stock', 'asc')
+                ->get();
+                
             return view('index', compact('sum_qty', 'total_amount', 'customer', 'logs', 'items'));
-        } else {
+        }
+        
+        else {
             return view('login');
         }
     }
@@ -84,7 +106,8 @@ class UserController extends Controller
     {
 
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'suadmin') {
+        // if ($user_type == 'suadmin') {
+        if ($user_type) {
             return view('emp_registration');
         } else {
             return redirect(url('index'))->with("fail", "Only SuAdmin can do Employee Registration.");
@@ -93,7 +116,8 @@ class UserController extends Controller
     public function emp_list()
     {
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'suadmin') {
+        // if ($user_type == 'suadmin') {
+        if ($user_type) {
             $emp_list = DB::table('user_details')->where('type', 'admin')->get();
             return view('emp_list', compact('emp_list'));//
         } else {
@@ -126,6 +150,7 @@ class UserController extends Controller
             'city' => $request->city,
             'state' => $request->state,
             'pincode' => $request->pincode,
+            'type' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'status' => 1
