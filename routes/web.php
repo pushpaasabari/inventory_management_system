@@ -13,6 +13,12 @@ Route::get('/registration', [UserController::class, 'registration']);
 Route::post('/registration', [UserController::class, 'registration_post']);
 Route::get('/emp_list', [UserController::class, 'emp_list']);
 
+Route::get('/add_production', [ProductionController::class, 'add_production']);
+Route::post('/add_production', [ProductionController::class, 'add_production_post']);
+Route::get('/list_production', [ProductionController::class, 'list_production']);
+Route::get('/list_production_status', [ProductionController::class, 'list_production_status']);
+Route::get('/list_production_status_change/{id}/{production_status}', [ProductionController::class, 'list_production_status_change']);
+
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);
 Route::get('/list_item', [InventoryController::class, 'list_item']);
