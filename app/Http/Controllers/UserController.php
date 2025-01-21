@@ -153,7 +153,7 @@ class UserController extends Controller
             'city' => $request->city,
             'state' => $request->state,
             'pincode' => $request->pincode,
-            'type' => 'admin',
+            'type' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'status' => 1

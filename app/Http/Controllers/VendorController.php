@@ -10,6 +10,9 @@ class VendorController extends Controller
 {
     public function add_vendor_post(Request $request)
     {
+        // echo "<pre>";
+        // print_r($request->all());
+        // exit();
         $request->validate([
             'vendor_name' => 'required',
             'vendor_gstin' => 'required',

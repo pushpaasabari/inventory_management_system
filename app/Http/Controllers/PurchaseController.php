@@ -25,6 +25,9 @@ class PurchaseController extends Controller
 
     public function add_purchase_post(Request $request)
     {
+        echo "<pre>";
+        print_r($request->all());
+        exit();
         $request->validate([
             'vendor_id' => 'required',
             'vendor_name' => 'required',
