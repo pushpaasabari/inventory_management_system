@@ -13,7 +13,8 @@ class PurchaseController extends Controller
     {
 
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'admin') {
+        // if ($user_type == 'admin') {
+        if ($user_type) {
             $vendor = DB::table('vendor')->get();
             $item = DB::table('item')->get();
             return view('add_purchase', compact('vendor', 'item'));

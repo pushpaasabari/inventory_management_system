@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->increments('id')->unique();
             $table->string('fname', 120);
             $table->string('lname', 120);
-            $table->integer('mobile');
+            $table->string('mobile',11);
             $table->string('dob', 120);
             $table->string('email', 120);
             $table->string('pwd', 120);
@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('city', 120);
             $table->string('state', 120);
             $table->string('pincode', 120);
+            $table->string('type', 10);
             $table->string('created_at', 120);
             $table->string('updated_at', 120);
             $table->integer('status');

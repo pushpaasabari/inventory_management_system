@@ -16,7 +16,8 @@ class InventoryController extends Controller
     public function add_item()
     {
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'admin') {
+        // if ($user_type == 'admin') {
+        if ($user_type) {
             return view('add_item');
         } else {
             return redirect(url('index'))->with("fail", "Only Admin's can add Item");
@@ -189,7 +190,8 @@ class InventoryController extends Controller
     public function exportInventory()
     {
         $user_type = Session::get('session_user_type');
-        if ($user_type == 'suadmin') {
+        // if ($user_type == 'suadmin') {
+        if ($user_type) {
 
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();

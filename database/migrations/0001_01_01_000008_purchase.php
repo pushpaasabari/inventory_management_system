@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->increments('id')->unique();
             $table->string('vendor_id', 11);
             $table->string('vendor_name', 255);
-            $table->string('user_name', 255);
+            $table->string('vendor_address', 255);
             $table->string('vendor_mobile', 15);
             $table->string('vendor_gstin', 15);
             $table->string('purchase_bill', 50);
