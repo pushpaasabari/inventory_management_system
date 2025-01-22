@@ -7,6 +7,8 @@ use DB;
 use Carbon\Carbon;
 use Session;
 use App\Models\Log;
+// use Illuminate\Support\Facades\Log;
+
 class PurchaseController extends Controller
 {
     public function add_purchase()
@@ -25,10 +27,10 @@ class PurchaseController extends Controller
 
     public function add_purchase_post(Request $request)
     {
-        // echo "<pre>";
-        // print_r($request->all());
-        // print_r(Session::get('session_name'));
-        // exit();
+        echo "<pre>";
+        print_r($request->all());
+        print_r(Session::get('session_name'));
+        exit();
         $request->validate([
             'vendor_id' => 'required',
             'vendor_name' => 'required',
@@ -131,6 +133,85 @@ class PurchaseController extends Controller
         }
 
     }
+
+//     public function add_purchase_post(Request $request)
+// {
+//     $request->validate([
+//         'vendor_id' => 'required',
+//         'vendor_name' => 'required',
+//         'vendor_mobile' => 'required',
+//         'vendor_gstin' => 'required',
+//         'purchase_bill' => 'required',
+//         'purchase_date' => 'required|date',
+//         'item_id' => 'required|array',
+//         'item_name' => 'required|array',
+//         'item_hsn' => 'required|array',
+//         'item_mrp' => 'required|array',
+//         'item_qty' => 'required|array',
+//         'item_purchase' => 'required|array',
+//         'item_amount' => 'required|array',
+//         'item_totalAmount' => 'required|numeric',
+//     ]);
+
+//     try {
+//         DB::transaction(function () use ($request) {
+//             $user_type = Session::get('session_name');
+
+//             // Insert purchase data
+//             $purchaseID = DB::table('purchase')->insertGetId([
+//                 'vendor_id' => $request->vendor_id,
+//                 'vendor_name' => $request->vendor_name,
+//                 'user_name' => $user_type,
+//                 'vendor_mobile' => $request->vendor_mobile,
+//                 'vendor_gstin' => $request->vendor_gstin,
+//                 'purchase_bill' => $request->purchase_bill,
+//                 'purchase_date' => $request->purchase_date,
+//                 'total_amount' => $request->item_totalAmount,
+//                 'purchase_created_at' => Carbon::now(),
+//                 'purchase_updated_at' => Carbon::now()
+//             ]);
+
+//             // Handle purchase items and stock updates
+//             foreach ($request->item_id as $index => $itemId) {
+//                 DB::table('purchase_item')->insert([
+//                     'purchase_id' => $purchaseID,
+//                     'vendor_name' => $request->vendor_name,
+//                     'purchase_bill' => $request->purchase_bill,
+//                     'purchase_date' => $request->purchase_date,
+//                     'item_id' => $itemId,
+//                     'item_hsn' => $request->item_hsn[$index],
+//                     'item_name' => $request->item_name[$index],
+//                     'item_mrp' => $request->item_mrp[$index],
+//                     'item_qty' => $request->item_qty[$index],
+//                     'item_purchase_price' => $request->item_purchase[$index],
+//                     'item_amount' => $request->item_amount[$index],
+//                     'created_at' => Carbon::now(),
+//                     'updated_at' => Carbon::now(),
+//                 ]);
+
+//                 // Update item stock
+//                 $getStock = DB::table('item')->where('id', $itemId)->value('item_stock') ?? 0;
+//                 $newStock = $getStock + $request->item_qty[$index];
+//                 DB::table('item')->where('id', $itemId)->update([
+//                     'item_stock' => $newStock,
+//                     'item_updated_at' => Carbon::now(),
+//                 ]);
+//             }
+//         });
+
+//         return redirect(url('add_purchase'))->with("success", "Purchase added successfully");
+
+//     } catch (\Exception $e) {
+//         Log::error('Failed to add purchase', [
+//             'error_message' => $e->getMessage(),
+//             'user_type' => Session::get('session_user_type'),
+//             'user_name' => Session::get('session_name'),
+//         ]);
+
+//         return redirect(url('add_purchase'))->with("fail", "Purchase adding failed, try again");
+//     }
+// }
+
 
     public function fetch_vendor_details(Request $request)
     {
