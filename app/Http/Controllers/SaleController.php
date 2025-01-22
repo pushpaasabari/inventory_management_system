@@ -49,6 +49,9 @@ class SaleController extends Controller
 
     public function add_sale_post(Request $request)
     {
+        // echo "<pre>";
+        // print_r($request->all());
+        // exit();
         $request->validate([
             'customer_id' => 'required',
             'customer_name' => 'required',
