@@ -38,7 +38,7 @@ class UserController extends Controller
                 ->selectRaw('SUM(CAST(item_amount AS DECIMAL)) as total_amount')
                 ->value('total_amount');
                 
-            $logs = DB::table('logs')->get();
+            $logs = DB::table('logs')->orderBy('created_at', 'desc')->get();
             
             $items = DB::table('item')
                 ->where('item_stock', '<', 10)

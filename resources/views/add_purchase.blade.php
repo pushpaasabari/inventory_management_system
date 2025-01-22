@@ -53,7 +53,9 @@
                             <input type="text" class="form-control" name="vendor_mobile" id="vendor_mobile"
                                 placeholder="Mobile" required>
                             <input type="hidden" class="form-control" name="vendor_name" id="vendor_name"
-                                placeholder="Mobile" required>
+                                placeholder="Name" required>
+                            <input type="hidden" class="form-control" name="vendor_address" id="vendor_address"
+                                placeholder="Address" required>
                         </div>
                         <div class="col-sm-2 pb-2">
                             <label for="vendor_gstin">GSTIN :</label>
@@ -151,57 +153,57 @@
 ***********************************-->
 @include('layouts.ajax')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let rowIndex = document.querySelectorAll('#itemTableBody tr').length; 
+document.addEventListener('DOMContentLoaded', function() {
+    let rowIndex = document.querySelectorAll('#itemTableBody tr').length;
 
-        document.querySelector('#addRowButton').addEventListener('click', function(e) {
+    document.querySelector('#addRowButton').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const container = document.getElementById('itemTableBody');
+        const firstRow = container.querySelector('tr');
+        const newRow = firstRow.cloneNode(true);
+
+        newRow.querySelectorAll('input').forEach(input => {
+            input.value = '';
+            input.removeAttribute('id');
+        });
+
+        newRow.querySelectorAll('select').forEach(select => {
+            select.selectedIndex = 0;
+            select.removeAttribute('id');
+        });
+
+        newRow.querySelector('td:first-child').innerText = ++rowIndex;
+
+        container.appendChild(newRow);
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('remove-row')) {
             e.preventDefault();
 
+            const row = e.target.closest('tr');
             const container = document.getElementById('itemTableBody');
-            const firstRow = container.querySelector('tr');
-            const newRow = firstRow.cloneNode(true);
 
-            newRow.querySelectorAll('input').forEach(input => {
-                input.value = '';
-                input.removeAttribute('id');
-            });
+            if (container.querySelectorAll('tr').length > 1) {
+                row.remove();
 
-            newRow.querySelectorAll('select').forEach(select => {
-                select.selectedIndex = 0; 
-                select.removeAttribute('id');
-            });
+                const rows = container.querySelectorAll('tr');
+                rowIndex = rows.length;
 
-            newRow.querySelector('td:first-child').innerText = ++rowIndex;
-
-            container.appendChild(newRow);
-        });
-
-        document.addEventListener('click', function(e) {
-            if (e.target && e.target.classList.contains('remove-row')) {
-                e.preventDefault();
-
-                const row = e.target.closest('tr');
-                const container = document.getElementById('itemTableBody');
-
-                if (container.querySelectorAll('tr').length > 1) {
-                    row.remove();
-
-                    const rows = container.querySelectorAll('tr');
-                    rowIndex = rows.length; 
-
-                    rows.forEach((row, index) => {
-                        row.querySelector('td:first-child').innerText = index + 1;
-                    });
-                } else {
-                    alert("At least one row is required.");
-                }
+                rows.forEach((row, index) => {
+                    row.querySelector('td:first-child').innerText = index + 1;
+                });
+            } else {
+                alert("At least one row is required.");
             }
-        });
+        }
     });
+});
 </script>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     function updateTotalAmount() {
         let total = 0;
         $('.item_amount').each(function() {
@@ -209,53 +211,52 @@
             amount = isNaN(amount) ? 0 : amount;
             total += amount;
         });
-        $('#item_totalAmount').val(total.toFixed(2)); 
+        $('#item_totalAmount').val(total.toFixed(2));
     }
 
     $('#itemTableBody').on('input', '.item_qty', function() {
-        var currentRow = $(this).closest('tr'); 
-        var qty = parseFloat($(this).val()); 
-        var price = parseFloat(currentRow.find('.item_purchase').val()); 
+        var currentRow = $(this).closest('tr');
+        var qty = parseFloat($(this).val());
+        var price = parseFloat(currentRow.find('.item_purchase').val());
 
         qty = isNaN(qty) ? 0 : qty;
         price = isNaN(price) ? 0 : price;
 
-        var amount = qty * price; 
-        currentRow.find('.item_amount').val(amount.toFixed(2)); 
+        var amount = qty * price;
+        currentRow.find('.item_amount').val(amount.toFixed(2));
 
-        updateTotalAmount(); 
+        updateTotalAmount();
     });
 
     $('#itemTableBody').on('input', '.item_purchase', function() {
-        var currentRow = $(this).closest('tr'); 
-        var qty = parseFloat(currentRow.find('.item_qty').val());  
-        var price = parseFloat($(this).val());  
+        var currentRow = $(this).closest('tr');
+        var qty = parseFloat(currentRow.find('.item_qty').val());
+        var price = parseFloat($(this).val());
 
         qty = isNaN(qty) ? 0 : qty;
         price = isNaN(price) ? 0 : price;
 
-        var amount = qty * price;  
-        currentRow.find('.item_amount').val(amount.toFixed(2));  
+        var amount = qty * price;
+        currentRow.find('.item_amount').val(amount.toFixed(2));
 
-        updateTotalAmount();  
+        updateTotalAmount();
     });
 
-     $('#itemTableBody').on('input', '.item_amount', function() {
-        updateTotalAmount();  
+    $('#itemTableBody').on('input', '.item_amount', function() {
+        updateTotalAmount();
     });
 
-     $('#itemTableBody').on('click', '.remove-row', function() {
-        $(this).closest('tr').remove();  
-        updateTotalAmount();  
+    $('#itemTableBody').on('click', '.remove-row', function() {
+        $(this).closest('tr').remove();
+        updateTotalAmount();
     });
 });
-
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var today = new Date().toISOString().split('T')[0];
-        document.getElementById('purchase_date').setAttribute('value', today);
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('purchase_date').setAttribute('value', today);
+});
 </script>
 
 @include('layouts.footer')

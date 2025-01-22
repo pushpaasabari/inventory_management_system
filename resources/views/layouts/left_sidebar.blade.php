@@ -20,11 +20,11 @@
             <li class="nav-label">Apps</li>
             <li class="mega-menu mega-menu-sm">
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Pruduction</span>
+                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Product</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{url('add_production')}}">Pruduction Order</a></li>
-                    <li><a href="{{url('list_production')}}">Pruduction List</a></li>
+                    <li><a href="{{url('add_product')}}">Add Pruduct</a></li>
+                    <li><a href="{{url('list_product')}}">Pruduct List</a></li>
                     <!-- <li><a href="{{url('list_customer')}}">Customer List</a></li> -->
                 </ul>
             </li>
@@ -68,7 +68,7 @@
                     <li><a href="{{url('download_pdf')}}">Stock PDF</a></li>
                 </ul>
             </li>
-            <li><a href="{{url('logout')}}"><i class="icon-key"></i> <span>Logout</span></a>
+            <li><a href="{{url('logout')}}"><i class="icon-key"></i> <span class="nav-text">Logout</span></a>
         </ul>
     </div>
 </div>

@@ -13,11 +13,11 @@ Route::get('/registration', [UserController::class, 'registration']);
 Route::post('/registration', [UserController::class, 'registration_post']);
 Route::get('/emp_list', [UserController::class, 'emp_list']);
 
-Route::get('/add_production', [ProductionController::class, 'add_production']);
-Route::post('/add_production', [ProductionController::class, 'add_production_post']);
-Route::get('/list_production', [ProductionController::class, 'list_production']);
-Route::get('/list_production_status', [ProductionController::class, 'list_production_status']);
-Route::get('/list_production_status_change/{id}/{production_status}', [ProductionController::class, 'list_production_status_change']);
+Route::get('/add_product', [ProductionController::class, 'add_product']);
+Route::post('/add_product', [ProductionController::class, 'add_product_post']);
+Route::get('/list_product', [ProductionController::class, 'list_product']);
+Route::get('/list_product_status', [ProductionController::class, 'list_production_status']);
+Route::get('/list_product_status_change/{id}/{product_status}', [ProductionController::class, 'list_product_status_change']);
 
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);
@@ -58,6 +58,3 @@ Route::get('/export', [InventoryController::class, 'exportInventory']);
 Route::get('/import', [InventoryController::class, 'importInventory']);
 Route::post('/import', [InventoryController::class, 'importInventoryPost']);
 Route::get('/download_pdf', [InventoryController::class, 'downloadPDF']);
-
-
-

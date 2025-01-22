@@ -7,6 +7,8 @@ use DB;
 use Carbon\Carbon;
 use Session;
 use App\Models\Log;
+use Illuminate\Support\Facades\Validator;
+// use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
@@ -30,12 +32,29 @@ class PurchaseController extends Controller
         // print_r($request->all());
         // print_r(Session::get('session_name'));
         // exit();
+        // dd($request->all());
         
-        $request->validate([
+        // $request->validate([
+        //     'vendor_id' => 'required',
+        //     'vendor_name' => 'required',
+        //     'vendor_mobile' => 'required',
+        //     'vendor_gstin' => 'required',
+        //     'purchase_bill' => 'required',
+        //     'purchase_date' => 'required|date',
+        //     'item_id' => 'required|array',
+        //     'item_name' => 'required|array',
+        //     'item_hsn' => 'required|array',
+        //     'item_mrp' => 'required|array',
+        //     'item_qty' => 'required|array',
+        //     'item_purchase' => 'required|array',
+        //     'item_amount' => 'required|array',
+        //     'item_totalAmount' => 'required|numeric',
+        // ]);
+        // dd($validate->errors()->all());
+        $validator = Validator::make($request->all(), [
             'vendor_id' => 'required',
             'vendor_name' => 'required',
             'vendor_mobile' => 'required',
-            'vendor_address' => 'required',
             'vendor_gstin' => 'required',
             'purchase_bill' => 'required',
             'purchase_date' => 'required|date',
@@ -48,16 +67,18 @@ class PurchaseController extends Controller
             'item_amount' => 'required|array',
             'item_totalAmount' => 'required|numeric',
         ]);
-
+        
+        if ($validator->fails()) {
+            dd($validator->errors()->all());
+        }
         try {
             $user_type = Session::get('session_name');
 
             $purchase = DB::table('purchase')->insert([
                 'vendor_id' => $request->vendor_id,
                 'vendor_name' => $request->vendor_name,
-                // 'user_name' => $user_type,
+                'user_name' => $user_type,
                 'vendor_mobile' => $request->vendor_mobile,
-                'vendor_address' => $request->vendor_address,
                 'vendor_gstin' => $request->vendor_gstin,
                 'purchase_bill' => $request->purchase_bill,
                 'purchase_date' => $request->purchase_date,

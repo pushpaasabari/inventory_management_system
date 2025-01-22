@@ -10,7 +10,7 @@ use App\Models\Log;
 
 class ProductionController extends Controller
 {
-    public function add_production()
+    public function add_product()
     {
         $user_type = Session::get('session_user_type');
         // if ($user_type == 'admin') {
@@ -20,7 +20,7 @@ class ProductionController extends Controller
             // Fetch the last sale bill number
             $lastSale = DB::table('sale')->orderBy('sale_bill', 'desc')->first();
             $nextBillNumber = $this->generateNextBillNumber($lastSale ? $lastSale->sale_bill : null);
-            return view('add_production', compact('customer', 'item', 'nextBillNumber'));
+            return view('add_product', compact('customer', 'item', 'nextBillNumber'));
         } else {
             return redirect(url('index'))->with("fail", "Only Admin's can do Sales");
         }
