@@ -36,9 +36,9 @@
                     <!-- Sidebar -->
                     <div class="col-md-3">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4><span class="text-body">Item List</span></h4>
+                            <h4><span class="text-body">Raw Item's</span></h4>
                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target=".bd-example-modal-lg">Add Item</button>
+                                data-target=".bd-example-modal-lg">Add Raw Item</button>
                         </div>
                         <hr>
                         <div class="mb-3">
@@ -142,20 +142,19 @@
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     $('#itemSearch').on('keyup', function() {
         var value = $(this).val().toLowerCase();
-        
+
         $('#itemTable tbody tr').filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
 });
-
 </script>
 @include('layouts.js')
 <script>
-    $('.activity').slimscroll({
+$('.activity').slimscroll({
     position: "right",
     size: "5px",
     height: "390px",

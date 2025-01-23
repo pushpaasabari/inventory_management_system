@@ -20,14 +20,13 @@
     </div>
 
     <div class="container-fluid">
-        <div class="col-lg-8 ">
+        <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">New Item</h4>
+                    <h4 class="card-title">Add Raw Item</h4>
                     <hr>
                     <form class="form-group" name="emp_registration" id="emp_registration" action="{{url('add_item')}}"
                         method="POST">
-                        {{ csrf_field() }}
                         {{ csrf_field() }}
                         @if (Session::has('success'))
                         <div class="alert alert-success">
@@ -40,30 +39,55 @@
                         </div>
                         @endif
                         <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label>Name</label>
+                                <input type="text" class="form-control input-default" name="item_name" id="item_name"
+                                    placeholder="Item Name *" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>HSN</label>
+                                <input type="text" class="form-control input-default" name="item_hsn" id="item_hsn"
+                                    placeholder="Item HSN *" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label>Name</label>
                                 <input type="text" class="form-control input-default" name="item_name" id="item_name"
                                     placeholder="Item Name *" required>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label>HSN</label>
-                                <input type="text" class="form-control input-default" name="item_hsn" id="item_hsn"
-                                    placeholder="Item HSN *" required>
+                            <div class="form-group col-md-4">
+                                <label>Desc</label>
+                                <input type="text" class="form-control input-default" name="item_desc" id="item_desc"
+                                    placeholder="Item Desc" required>
                             </div>
-                            <div class="form-group col-md-2">
-                                <label>Unit</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label>Primary Unit</label>
                                 <select class="form-control" id="item_unit" name="item_unit" required>
                                     <option value="">Select Unit</option>
                                     <option value="nos">NOS</option>
                                     <option value="kg">KG</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label>Secondary Unit</label>
+                                <select class="form-control" id="item_secondary_unit" name="item_secondary_unit">
+                                    <option value="">Select Unit</option>
+                                    <option value="nos">NOS</option>
+                                    <option value="kg">KG</option>
+                                </select>
+                            </div>
                             <div class="form-group col-md-5">
-                                <label>Desc</label>
-                                <input type="text" class="form-control input-default" name="item_desc" id="item_desc"
-                                    placeholder="Item Desc" required>
+                                <label>Convertion Factor</label>
+                                <!-- <select class="form-control" id="item_unit" name="item_unit" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="nos">NOS</option>
+                                    <option value="kg">KG</option>
+                                </select> -->
+                                <input type="text" class="form-control input-default" name="item_unit_conversion"
+                                    id="item_unit_conversion" placeholder="Unit Conversion" readonly>
                             </div>
                         </div>
                         <hr>
@@ -78,11 +102,11 @@
                                 <input type="text" class="form-control input-default" name="item_purchase"
                                     id="item_purchase" placeholder="Purchase Price *" required>
                             </div>
-                            <div class="form-group col-md-3">
+                            <!-- <div class="form-group col-md-3">
                                 <label>Sale Price</label>
                                 <input type="text" class="form-control input-default" name="item_sale" id="item_sale"
                                     placeholder="Sale Price *" required>
-                            </div>
+                            </div> -->
                         </div>
                         <hr>
 

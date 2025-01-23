@@ -27,14 +27,16 @@ class InventoryController extends Controller
 
     public function add_item_post(Request $request)
     {
+        // dd($request->all());
+        // exit();         
         $request->validate([
             'item_name' => 'required',
             'item_hsn' => 'required',
             'item_unit' => 'required',
-            'item_desc' => 'required',
+            // 'item_desc' => 'required',
             'item_mrp' => 'required',
             'item_purchase' => 'required',
-            'item_sale' => 'required'
+            // 'item_sale' => 'required'
         ]);
 
         try {
@@ -42,10 +44,12 @@ class InventoryController extends Controller
                 'item_name' => $request->item_name,
                 'item_hsn' => $request->item_hsn,
                 'item_unit' => $request->item_unit,
-                'item_desc' => $request->item_desc,
+                // 'item_desc' => $request->item_desc,
+                'item_desc' => $request->item_name,
                 'item_mrp' => $request->item_mrp,
                 'item_purchase' => $request->item_purchase,
-                'item_sale' => $request->item_sale,
+                'item_sale' => $request->item_purchase,
+                // 'item_sale' => $request->item_sale,
                 'item_stock' => 0,
                 'item_created_at' => Carbon::now(),
                 'item_updated_at' => Carbon::now(),

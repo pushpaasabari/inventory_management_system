@@ -12,8 +12,8 @@
                     <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Inventory</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{url('add_item')}}">Add Item</a></li>
-                    <li><a href="{{url('list_item')}}">Item List</a></li>
+                    <li><a href="{{url('add_item')}}">Add Raw Item</a></li>
+                    <li><a href="{{url('list_item')}}">Item Raw List</a></li>
                     <li><a href="{{url('list_item_status')}}">Item Status</a></li>
                 </ul>
             </li>

@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "mike42/escpos-php": "^4.0",
         "phpoffice/phpspreadsheet": "^2.2"
     },
     "require-dev": {
