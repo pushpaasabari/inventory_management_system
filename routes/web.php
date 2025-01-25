@@ -21,6 +21,15 @@ Route::get('/list_product_status_change/{id}/{product_status}', [ProductionContr
 
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);
+Route::get('/add_unit', [InventoryController::class, 'add_unit']);
+Route::get('/add_category', [InventoryController::class, 'add_category']);
+Route::post('/add_unit', [InventoryController::class, 'add_unit_post']);
+Route::post('/fetch_unit_details', [InventoryController::class, 'fetch_unit_details']);
+Route::post('/add_category', [InventoryController::class, 'add_category_post']);
+Route::get('/unit', [InventoryController::class, 'unit']);
+Route::get('/category', [InventoryController::class, 'category']);
+Route::post('/get_unit', [InventoryController::class, 'get_unit']);
+Route::post('/get_category', [InventoryController::class, 'get_category']);
 Route::get('/list_item', [InventoryController::class, 'list_item']);
 Route::get('/list_item_status', [InventoryController::class, 'list_item_status']);
 Route::get('/list_item_status_change/{id}/{item_status}', [InventoryController::class, 'list_item_status_change']);

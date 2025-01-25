@@ -18,11 +18,22 @@ class InventoryController extends Controller
         $user_type = Session::get('session_user_type');
         // if ($user_type == 'admin') {
         if ($user_type) {
-            return view('add_item');
+            $category = DB::table('category')->get();
+            $unit = DB::table('unit')->get();
+            return view('add_item', compact('category','unit'));
         } else {
             return redirect(url('index'))->with("fail", "Only Admin's can add Item");
         }
 
+    }
+    
+    public function fetch_unit_details(Request $request)
+    {
+        $get_unit_ajax['unit'] = DB::table('unit')
+            ->where("id", $request->id)
+            ->get()
+            ->first();
+        return response()->json($get_unit_ajax);
     }
 
     public function add_item_post(Request $request)
@@ -32,7 +43,7 @@ class InventoryController extends Controller
         $request->validate([
             'item_name' => 'required',
             'item_hsn' => 'required',
-            'item_unit' => 'required',
+            // 'item_unit' => 'required',
             // 'item_desc' => 'required',
             'item_mrp' => 'required',
             'item_purchase' => 'required',
@@ -43,7 +54,9 @@ class InventoryController extends Controller
             DB::table('item')->insert([
                 'item_name' => $request->item_name,
                 'item_hsn' => $request->item_hsn,
-                'item_unit' => $request->item_unit,
+                'unit_primary' => $request->unit_primary,
+                'unit_secondary' => $request->unit_secondary,
+                'unit_conversion' => $request->unit_conversion,
                 // 'item_desc' => $request->item_desc,
                 'item_desc' => $request->item_name,
                 'item_mrp' => $request->item_mrp,
@@ -81,6 +94,113 @@ class InventoryController extends Controller
             ]);
 
             return redirect(url('add_item'))->with("error", "Item adding Failed, try again");
+        }
+    }
+
+    public function unit()
+    {
+        $list_unit = DB::table('unit')->where('unit_status', 1)->get();
+        return view('unit', compact('list_unit') ?? null);
+        // return view('unit');
+    }
+    public function category()
+    {
+        $list_category = DB::table('category')->where('category_status', 1)->get();
+        return view('category', compact('list_category') ?? null);
+        // return view('unit');
+    }
+    
+    public function add_unit_post(Request $request)
+    {
+        // dd($request->all());
+        // exit();         
+        $request->validate([
+            'unit_primary' => 'required',
+            'unit_pri_short' => 'required',
+        ]);
+        
+
+        try {
+            DB::table('unit')->insert([
+                'unit_primary' => $request->unit_primary,
+                'unit_pri_short' => $request->unit_pri_short,
+                'unit_secondary' => $request->unit_secondary,
+                'unit_sec_short' => $request->unit_sec_short,
+                'unit_conversion' => $request->unit_conversion,
+                'unit_created_at' => Carbon::now(),
+                'unit_updated_at' => Carbon::now(),
+                'unit_status' => 1
+            ]);
+
+            // Log the item addition
+            Log::create([
+                'level' => 'info',
+                'message' => 'Unit added to inventory',
+                'context' => [
+                    'item_name' => $request->item_name,
+                    'user_type' => Session::get('session_user_type'),
+                    'user_name' => Session::get('session_name'),
+                ],
+            ]);
+
+            return redirect(url('unit'))->with("success", "Unit added successfully");
+        } catch (\Exception $e) {
+            // Log the failure
+            Log::create([
+                'level' => 'error',
+                'message' => 'Failed to add unit to inventory',
+                'context' => [
+                    'error_message' => $e->getMessage(),
+                    'user_type' => Session::get('session_user_type'),
+                    'user_name' => Session::get('session_name'),
+                ],
+            ]);
+
+            return redirect(url('unit'))->with("error", "Unit adding Failed, try again");
+        }
+    }
+    public function add_category_post(Request $request)
+    {
+        // dd($request->all());
+        // exit();         
+        $request->validate([
+            'category_name' => 'required'
+        ]);
+        
+
+        try {
+            DB::table('category')->insert([
+                'category_name' => $request->category_name,
+                'category_created_at' => Carbon::now(),
+                'category_updated_at' => Carbon::now(),
+                'category_status' => 1
+            ]);
+
+            // Log the item addition
+            Log::create([
+                'level' => 'info',
+                'message' => 'Category added to inventory',
+                'context' => [
+                    'item_name' => $request->item_name,
+                    'user_type' => Session::get('session_user_type'),
+                    'user_name' => Session::get('session_name'),
+                ],
+            ]);
+
+            return redirect(url('category'))->with("success", "Category added successfully");
+        } catch (\Exception $e) {
+            // Log the failure
+            Log::create([
+                'level' => 'error',
+                'message' => 'Failed to add Category to inventory',
+                'context' => [
+                    'error_message' => $e->getMessage(),
+                    'user_type' => Session::get('session_user_type'),
+                    'user_name' => Session::get('session_name'),
+                ],
+            ]);
+
+            return redirect(url('category'))->with("error", "Category adding Failed, try again");
         }
     }
 
@@ -124,6 +244,42 @@ class InventoryController extends Controller
             'item' => $item,
             'purchase_item' => $purchase_item,
             'sale_item' => $sale_item
+        ]);
+    }
+    public function get_unit(Request $request)
+    {
+        $unit['unit'] = DB::table('unit')
+            ->where("id", $request->id)
+            ->get()
+            ->first();
+        // $purchase_item['unit'] = DB::table('purchase_item')
+        //     ->where("item_id", $request->id)
+        //     ->get();
+        // $sale_item['unit'] = DB::table('unit')
+        //     ->where("item_id", $request->id)
+        //     ->get();
+        return response()->json([
+            'unit' => $unit
+            // 'purchase_item' => $purchase_item ?? null,
+            // 'sale_item' => $sale_item ?? null
+        ]);
+    }
+    public function get_category(Request $request)
+    {
+        $category['category'] = DB::table('category')
+            ->where("id", $request->id)
+            ->get()
+            ->first();
+        // $purchase_item['unit'] = DB::table('purchase_item')
+        //     ->where("item_id", $request->id)
+        //     ->get();
+        // $sale_item['unit'] = DB::table('unit')
+        //     ->where("item_id", $request->id)
+        //     ->get();
+        return response()->json([
+            'category' => $category
+            // 'purchase_item' => $purchase_item ?? null,
+            // 'sale_item' => $sale_item ?? null
         ]);
     }
 

@@ -1,0 +1,8 @@
+<form class="form-group" name="add_item" id="add_item" action="{{url('add_item')}}" method="POST">
+    	<div class="form-group col-md-3">
+                                <label>Purchase Price</label>
+                                <input type="text" class="form-control input-default" name="item_purchase"
+                                    id="item_purchase" placeholder="Purchase Price *" required>
+                            </div>
+	<button type="submit" class="btn btn-dark float-right">Save</button>
+</form>

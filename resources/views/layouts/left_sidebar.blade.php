@@ -13,7 +13,10 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{url('add_item')}}">Add Raw Item</a></li>
+                    <li><a href="{{url('unit')}}">Unit</a></li>
+                    <li><a href="{{url('category')}}">Category</a></li>
                     <li><a href="{{url('list_item')}}">Item Raw List</a></li>
+
                     <li><a href="{{url('list_item_status')}}">Item Status</a></li>
                 </ul>
             </li>

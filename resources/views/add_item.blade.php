@@ -25,8 +25,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Add Raw Item</h4>
                     <hr>
-                    <form class="form-group" name="emp_registration" id="emp_registration" action="{{url('add_item')}}"
-                        method="POST">
+                    <form class="form-group" name="add_item" id="add_item" action="{{url('add_item')}}" method="POST">
                         {{ csrf_field() }}
                         @if (Session::has('success'))
                         <div class="alert alert-success">
@@ -39,55 +38,69 @@
                         </div>
                         @endif
                         <div class="form-row">
-                            <div class="form-group col-md-8">
+                            <div class="form-group col-md-6">
                                 <label>Name</label>
                                 <input type="text" class="form-control input-default" name="item_name" id="item_name"
-                                    placeholder="Item Name *" required>
+                                    placeholder="Item Name *" autofocus required>
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>HSN</label>
+                            <div class="form-group col-md-3">
+                                <label>HSN Code</label>
                                 <input type="text" class="form-control input-default" name="item_hsn" id="item_hsn"
-                                    placeholder="Item HSN *" required>
+                                    placeholder="HSN Code *" required>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Name</label>
-                                <input type="text" class="form-control input-default" name="item_name" id="item_name"
-                                    placeholder="Item Name *" required>
+                            <div class="form-group col-md-3">
+                                <label>Category </label>
+                                <select class="form-control" id="item_category" name="item_category" required>
+                                    <option value="">Select Category</option>
+                                    @if($category->count() > 0)
+                                    @foreach($category as $value)
+                                    <option value="{{$value->id}}">{{$value->category_name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <label>Desc</label>
+                                <label>Desccription</label>
                                 <input type="text" class="form-control input-default" name="item_desc" id="item_desc"
                                     placeholder="Item Desc" required>
                             </div>
                         </div>
+                        <hr>
                         <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label>Primary Unit</label>
-                                <select class="form-control" id="item_unit" name="item_unit" required>
-                                    <option value="">Select Unit</option>
-                                    <option value="nos">NOS</option>
-                                    <option value="kg">KG</option>
+
+                                <select class="form-control" id="unit_primary" name="unit_primary" required>
+                                    <option value="">Select Primary Unit</option>
+                                    @if($unit->count() > 0)
+                                    @foreach($unit as $value)
+                                    <option value="{{$value->id}}">{{$value->unit_primary}} - {{$value->unit_pri_short}}
+                                    </option>
+                                    @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Secondary Unit</label>
-                                <select class="form-control" id="item_secondary_unit" name="item_secondary_unit">
-                                    <option value="">Select Unit</option>
-                                    <option value="nos">NOS</option>
-                                    <option value="kg">KG</option>
-                                </select>
+                                <!-- <select class="form-control" id="unit_secondary" name="unit_secondary" readonly>
+                                    <option value="">Secondary Unit</option>
+
+                                </select> -->
+                                <input type="text" class="form-control input-default" name="unit_secondary"
+                                    id="unit_secondary" placeholder="Secondary Unit" readonly>
                             </div>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-3">
                                 <label>Convertion Factor</label>
                                 <!-- <select class="form-control" id="item_unit" name="item_unit" required>
                                     <option value="">Select Unit</option>
                                     <option value="nos">NOS</option>
                                     <option value="kg">KG</option>
                                 </select> -->
-                                <input type="text" class="form-control input-default" name="item_unit_conversion"
-                                    id="item_unit_conversion" placeholder="Unit Conversion" readonly>
+                                <input type="text" class="form-control input-default" name="unit_conversion"
+                                    id="unit_conversion" placeholder="Unit Conversion" readonly>
                             </div>
                         </div>
                         <hr>
@@ -107,17 +120,19 @@
                                 <input type="text" class="form-control input-default" name="item_sale" id="item_sale"
                                     placeholder="Sale Price *" required>
                             </div> -->
-                        </div>
-                        <hr>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label>Opening Stock</label>
                                 <input type="number" class="form-control input-default" name="item_opening_stock"
                                     id="item_opening_stock" placeholder="Opening Stock" pattern="[0-9]{4}" readonly>
                             </div>
-
                         </div>
+                        <hr>
+
+                        <!-- 
+                        <div class="form-row">
+
+
+                        </div> -->
 
 
                         <button type="submit" class="btn btn-dark float-right">Save</button>
@@ -135,4 +150,71 @@
         Content body end
 ***********************************-->
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the inputs for name and village
+    const inputsToCapitalize = ['item_name', 'item_desc', 'item_category'];
+
+    inputsToCapitalize.forEach((id) => {
+        const inputElement = document.getElementById(id);
+
+        if (inputElement) {
+            // Add input event listener
+            inputElement.addEventListener('input', function() {
+                this.value = this.value.toUpperCase(); // Convert input value to uppercase
+            });
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Allow only numbers and two decimal places for Purchase Price and MRP
+    ['item_purchase', 'item_mrp'].forEach(id => {
+        const inputElement = document.getElementById(id);
+        inputElement.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9.]/g,
+                ''); // Remove non-numeric characters except '.'
+            // Allow only two decimal places
+            if (this.value.includes('.')) {
+                const parts = this.value.split('.');
+                parts[1] = parts[1].substring(0, 2); // Keep only the first two decimal digits
+                this.value = parts.join('.');
+            }
+        });
+    });
+
+    // Allow only numbers for HSN Code
+    const itemHsn = document.getElementById('item_hsn');
+    itemHsn.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    });
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#unit_primary').on('change', function() {
+        var id = this.value;
+        // alert(id);
+        // console.log(id);
+
+        // $("#unit_secondary").html('');
+        $.ajax({
+            url: "{{url('fetch_unit_details')}}",
+            type: "POST",
+            data: {
+                id: id,
+                _token: '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+                $('#unit_secondary').val(response.unit.unit_secondary);
+                $('#unit_conversion').val(response.unit.unit_conversion);
+            }
+        });
+    });
+});
+</script>
 @include('layouts.footer')
