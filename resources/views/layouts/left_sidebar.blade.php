@@ -14,7 +14,7 @@
                 <ul aria-expanded="false">
                     <li><a href="{{url('add_item')}}">Add Raw Item</a></li>
                     <li><a href="{{url('unit')}}">Unit</a></li>
-                    <li><a href="{{url('category')}}">Category</a></li>
+                    <li><a href="{{url('category')}}">Item Category</a></li>
                     <li><a href="{{url('list_item')}}">Item Raw List</a></li>
 
                     <li><a href="{{url('list_item_status')}}">Item Status</a></li>
@@ -27,6 +27,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="{{url('add_product')}}">Add Pruduct</a></li>
+                    <li><a href="{{url('product_category')}}">Pruduct Category</a></li>
                     <li><a href="{{url('list_product')}}">Pruduct List</a></li>
                     <!-- <li><a href="{{url('list_customer')}}">Customer List</a></li> -->
                 </ul>

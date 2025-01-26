@@ -13,11 +13,13 @@ Route::get('/registration', [UserController::class, 'registration']);
 Route::post('/registration', [UserController::class, 'registration_post']);
 Route::get('/emp_list', [UserController::class, 'emp_list']);
 
-Route::get('/add_product', [ProductionController::class, 'add_product']);
-Route::post('/add_product', [ProductionController::class, 'add_product_post']);
-Route::get('/list_product', [ProductionController::class, 'list_product']);
-Route::get('/list_product_status', [ProductionController::class, 'list_production_status']);
-Route::get('/list_product_status_change/{id}/{product_status}', [ProductionController::class, 'list_product_status_change']);
+Route::get('/add_product', [ProductController::class, 'add_product']);
+Route::post('/add_product', [ProductController::class, 'add_product_post']);
+Route::get('/product_category', [ProductController::class, 'product_category']);
+Route::post('/product_category', [ProductController::class, 'product_category_post']);
+Route::get('/list_product', [ProductController::class, 'list_product']);
+Route::get('/list_product_status', [ProductController::class, 'list_production_status']);
+Route::get('/list_product_status_change/{id}/{product_status}', [ProductController::class, 'list_product_status_change']);
 
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);

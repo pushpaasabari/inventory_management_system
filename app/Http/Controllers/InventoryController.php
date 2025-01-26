@@ -207,7 +207,9 @@ class InventoryController extends Controller
     public function list_item()
     {
         $list_item = DB::table('item')->where('item_status', 1)->get();
-        return view('list_item', compact('list_item'));
+        $category = DB::table('category')->get();
+        $unit = DB::table('unit')->get();
+        return view('list_item', compact('list_item','category','unit'));
     }
     public function list_item_status()
     {

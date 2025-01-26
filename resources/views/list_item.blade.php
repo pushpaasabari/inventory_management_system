@@ -161,4 +161,72 @@ $('.activity').slimscroll({
     color: "transparent"
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the inputs for name and village
+    const inputsToCapitalize = ['item_name', 'item_desc', 'item_category'];
+
+    inputsToCapitalize.forEach((id) => {
+        const inputElement = document.getElementById(id);
+
+        if (inputElement) {
+            // Add input event listener
+            inputElement.addEventListener('input', function() {
+                this.value = this.value.toUpperCase(); // Convert input value to uppercase
+            });
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Allow only numbers and two decimal places for Purchase Price and MRP
+    ['item_purchase', 'item_mrp'].forEach(id => {
+        const inputElement = document.getElementById(id);
+        inputElement.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9.]/g,
+                ''); // Remove non-numeric characters except '.'
+            // Allow only two decimal places
+            if (this.value.includes('.')) {
+                const parts = this.value.split('.');
+                parts[1] = parts[1].substring(0, 2); // Keep only the first two decimal digits
+                this.value = parts.join('.');
+            }
+        });
+    });
+
+    // Allow only numbers for HSN Code
+    const itemHsn = document.getElementById('item_hsn');
+    itemHsn.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    });
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#unit_primary').on('change', function() {
+        var id = this.value;
+        // alert(id);
+        // console.log(id);
+
+        // $("#unit_secondary").html('');
+        $.ajax({
+            url: "{{url('fetch_unit_details')}}",
+            type: "POST",
+            data: {
+                id: id,
+                _token: '{{csrf_token()}}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                // console.log(response);
+                $('#unit_secondary').val(response.unit.unit_secondary);
+                $('#unit_conversion').val(response.unit.unit_conversion);
+            }
+        });
+    });
+});
+</script>
 @include('layouts.foot')
