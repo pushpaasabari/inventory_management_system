@@ -29,8 +29,8 @@
     @endif
     <div class="col-lg-12">
         <div class="card">
-            <form name="add_sale" id="add_sale" class="form-horizontal" method="Post" action="{{ url('add_sale') }}"
-                enctype="multipart/form-data" autocomplete="on">
+            <form name="add_product" id="add_product" class="form-horizontal" method="Post"
+                action="{{ url('add_product') }}" enctype="multipart/form-data" autocomplete="on">
                 {{ csrf_field() }}
                 <div class="card-body" style="text-transform:uppercase">
                     <h4 class="card-title">Add Product</h4>
@@ -47,9 +47,9 @@
                             <label for="product_category">Category :</label>
                             <select class="form-control" id="product_category" name="product_category" required>
                                 <option value="">Select Category</option>
-                                @if($category->count() > 0)
-                                @foreach($category as $value)
-                                <option value="{{$value->id}}">{{$value->category_name}}</option>
+                                @if($product_category->count() > 0)
+                                @foreach($product_category as $value)
+                                <option value="{{$value->id}}">{{$value->product_category_name}}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -64,22 +64,40 @@
                                 <tr>
                                     <th class="col-sm-1 pb-2">#</th>
                                     <th class="col-sm-2 pb-2">ITEM</th>
-                                    <th class="col-sm-1 pb-2">HSN</th>
-                                    <th class="col-sm-1 pb-2">MRP</th>
                                     <th class="col-sm-1 pb-2">QTY</th>
-                                    <th class="col-sm-1 pb-2">PRICE</th>
-                                    <th class="col-sm-1 pb-2">AMOUNT</th>
                                     <th class="col-sm-1 pb-2"></th>
                                 </tr>
                             </thead>
-
+                            <tbody id="itemTableBody">
+                                <tr rowid='1'>
+                                    <td class="col-sm-1 pb-2">1</td>
+                                    <td class="col-sm-2 pb-2">
+                                        <select class="item_id select2 form-control form-control-sm" name="item_id[]"
+                                            id="item_id" data-placeholder="" style="width: 100%;">
+                                            <option></option>
+                                            @if($item->count() > 0)
+                                            @foreach($item as $value)
+                                            <option value="{{$value->id}}">{{$value->item_name}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </td>
+                                    <td class="col-sm-1 pb-2">
+                                        <input type="number" name="item_qty[]" id="item_qty"
+                                            class="form-control form-control-sm item_qty" min="0" placeholder="Qty">
+                                        <!-- <input type="hidden" name="item_stock[]" id="item_stock"
+                                            class="form-control form-control-sm item_stock" min="0" placeholder="Qty"> -->
+                                    </td>
+                                    <td class="col-sm-1 pb-2"><i class="remove-row far fa-trash-alt "></i></td>
+                                </tr>
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <td><button id="addRowButton" class="btn btn-primary">Add Row</button></td>
-                                    <td colspan="5" class="text-right">TOTAL</td>
-                                    <td><input type="number" class="form-control form-control-sm item_totalAmount"
+                                    <!-- <td colspan="5" class="text-right">TOTAL</td> -->
+                                    <!-- <td><input type="number" class="form-control form-control-sm item_totalAmount"
                                             name="item_totalAmount" id="item_totalAmount" placeholder="Total" readonly>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tfoot>
                         </table>

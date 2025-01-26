@@ -2,21 +2,21 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">New Unit</h5>
+                <h5 class="modal-title">Add Product Category</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="form-group" name="add_category" id="add_category" action="{{url('add_category')}}"
-                    method="POST">
+                <form class="form-group" name="product_category" id="product_category"
+                    action="{{url('product_category')}}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group row ">
                         <div class="col-md-3 ">
                         </div>
                         <label for="unit" class="col-sm-2 col-form-label pb-3">Category :</label>
                         <div class="col-md-3 ">
-                            <input type="text" class="form-control" name="category_name" id="category_name"
-                                placeholder="Category Name *" required>
+                            <input type="text" class="form-control" name="product_category_name"
+                                id="product_category_name" placeholder="Product Category *" required>
                         </div>
                     </div>
             </div>
@@ -32,7 +32,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Unit</h5>
+                <h5 class="modal-title">Edit Product Category</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>

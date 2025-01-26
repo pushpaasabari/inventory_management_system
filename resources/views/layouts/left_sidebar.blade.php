@@ -26,9 +26,10 @@
                     <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Product</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{url('add_product')}}">Add Pruduct</a></li>
-                    <li><a href="{{url('product_category')}}">Pruduct Category</a></li>
-                    <li><a href="{{url('list_product')}}">Pruduct List</a></li>
+                    <li><a href="{{url('add_product')}}">Add Product</a></li>
+                    <li><a href="{{url('product_category')}}">Product Category</a></li>
+                    <!-- <li><a href="{{url('product_sub_category')}}">Product Sub Category</a></li> -->
+                    <li><a href="{{url('list_product')}}">Product List</a></li>
                     <!-- <li><a href="{{url('list_customer')}}">Customer List</a></li> -->
                 </ul>
             </li>
