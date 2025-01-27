@@ -27,6 +27,15 @@
         {{Session::get('fail')}}
     </div>
     @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="col-lg-12">
         <div class="card">
             <form name="add_product" id="add_product" class="form-horizontal" method="Post"
@@ -84,7 +93,11 @@
                                     </td>
                                     <td class="col-sm-1 pb-2">
                                         <input type="number" name="item_qty[]" id="item_qty"
-                                            class="form-control form-control-sm item_qty" min="0" placeholder="Qty">
+                                            class="form-control form-control-sm item_qty" min="0" step="0.001"
+                                            inputmode="decimal" placeholder="Qty">
+
+                                        <!-- <input type="number" name="item_qty[]" id="item_qty"
+                                            class="form-control form-control-sm item_qty" min="0" placeholder="Qty"> -->
                                         <!-- <input type="hidden" name="item_stock[]" id="item_stock"
                                             class="form-control form-control-sm item_stock" min="0" placeholder="Qty"> -->
                                     </td>

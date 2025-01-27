@@ -26,94 +26,91 @@ class ProductController extends Controller
 
     public function add_product_post(Request $request)
     {
-        echo "<pre>";
-        print_r($request->all());
-        exit();
+        // echo "<pre>";
+        // print_r($request->all());
+        // exit();
+
         $request->validate([
-            'customer_id' => 'required',
-            'customer_name' => 'required',
-            'customer_mobile' => 'required',
-            'sale_bill' => 'required',
-            'sale_date' => 'required|date',
+            'product_name' => 'required',
+            'product_category' => 'required',
             'item_id' => 'required|array',
-            'item_name' => 'required|array',
-            'item_hsn' => 'required|array',
-            'item_mrp' => 'required|array',
-            'item_qty' => 'required|array',
-            'item_sale' => 'required|array',
-            'item_amount' => 'required|array',
-            'item_totalAmount' => 'required|numeric',
+            'item_qty' => 'required|array'
         ]);
+
         try {
             $user_type = Session::get('session_name');
 
-            $sale = DB::table('sale')->insert([
-                'customer_id' => $request->customer_id,
-                'customer_name' => $request->customer_name,
-                'user_name' => $user_type,
-                'customer_mobile' => $request->customer_mobile,
-                'sale_bill' => $request->sale_bill,
-                'sale_date' => $request->sale_date,
-                'total_amount' => $request->item_totalAmount,
-                'sale_created_at' => Carbon::now(),
-                'sale_updated_at' => Carbon::now()
+            $itemIdsJson = json_encode($request->item_id);
+            $itemQtysJson = json_encode($request->item_qty);
+
+            $product = DB::table('product')->insert([
+                'product_name' => $request->product_name,
+                'product_category' => $request->product_category,
+                'item_id' => $itemIdsJson,
+                'item_qty' => $itemQtysJson,
+                'product_created_at' => Carbon::now(),
+                'product_updated_at' => Carbon::now(),
+                'product_status' =>1
             ]);
 
-            $saleID = DB::table('sale')
-                ->where('sale_bill', $request->sale_bill)
-                ->get('id')
-                ->first();
+            // dd($product);
+            // exit();
 
-            foreach ($request->item_id as $index => $itemId) {
-                DB::table('sale_item')->insert([
-                    'sale_id' => $saleID->id,
-                    'sale_bill' => $request->sale_bill,
-                    'sale_date' => $request->sale_date,
-                    'customer_name' => $request->customer_name,
-                    'item_id' => $itemId,
-                    'item_hsn' => $request->item_hsn[$index],
-                    'item_name' => $request->item_name[$index],
-                    'item_mrp' => $request->item_mrp[$index],
-                    'item_qty' => $request->item_qty[$index],
-                    'item_sale_price' => $request->item_sale[$index],
-                    'item_amount' => $request->item_amount[$index],
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
+            // $saleID = DB::table('sale')
+            //     ->where('sale_bill', $request->sale_bill)
+            //     ->get('id')
+            //     ->first();
+
+            // foreach ($request->item_id as $index => $itemId) {
+            //     DB::table('sale_item')->insert([
+            //         'sale_id' => $saleID->id,
+            //         'sale_bill' => $request->sale_bill,
+            //         'sale_date' => $request->sale_date,
+            //         'customer_name' => $request->customer_name,
+            //         'item_id' => $itemId,
+            //         'item_hsn' => $request->item_hsn[$index],
+            //         'item_name' => $request->item_name[$index],
+            //         'item_mrp' => $request->item_mrp[$index],
+            //         'item_qty' => $request->item_qty[$index],
+            //         'item_sale_price' => $request->item_sale[$index],
+            //         'item_amount' => $request->item_amount[$index],
+            //         'created_at' => Carbon::now(),
+            //         'updated_at' => Carbon::now(),
+            //     ]);
 
                 Log::create([
                     'level' => 'info',
-                    'message' => 'Sale added to inventory',
+                    'message' => 'Product added to inventory',
                     'context' => [
-                        'item_name' => $request->sale_bill,
+                        'item_name' => $request->product_name,
                         'user_type' => Session::get('session_user_type'),
                         'user_name' => Session::get('session_name'),
                     ],
                 ]);
 
-                $getstock = DB::table('item')
-                    ->where('id', $itemId)
-                    ->get('item_stock')
-                    ->first();
+            //     $getstock = DB::table('item')
+            //         ->where('id', $itemId)
+            //         ->get('item_stock')
+            //         ->first();
 
-                if (!$getstock->item_stock) {
-                    return redirect(url('add_sale'))->with("error", "Out Of Stock");
-                } else {
-                    $updatedstock = $getstock->item_stock - $request->item_qty[$index];
-                    DB::table('item')->where('id', $itemId)
-                        ->update([
-                            'item_stock' => $updatedstock,
-                            'item_updated_at' => Carbon::now()
-                        ]);
-                }
-            }
-            return redirect(url('add_sale'))->with("success", "Sale added successfully");
+            //     if (!$getstock->item_stock) {
+            //         return redirect(url('add_sale'))->with("error", "Out Of Stock");
+            //     } else {
+            //         $updatedstock = $getstock->item_stock - $request->item_qty[$index];
+            //         DB::table('item')->where('id', $itemId)
+            //             ->update([
+            //                 'item_stock' => $updatedstock,
+            //                 'item_updated_at' => Carbon::now()
+            //             ]);
+            //     }
+            // }
+            return redirect(url('add_product'))->with("success", "Product added successfully");
 
         } catch (\Exception $e) {
             // Log the failure
             Log::create([
                 'level' => 'error',
-                'message' => 'Failed to add item to inventory',
+                'message' => 'Failed to add Product to inventory',
                 'context' => [
                     'error_message' => $e->getMessage(),
                     'user_type' => Session::get('session_user_type'),
@@ -121,7 +118,7 @@ class ProductController extends Controller
                 ],
             ]);
 
-            return redirect(url('add_item'))->with("fail", "Sale adding Failed, try again");
+            return redirect(url('add_product'))->with("error", "Product adding Failed, try again");
         }
 
     }
