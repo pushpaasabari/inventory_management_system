@@ -21,6 +21,9 @@ Route::get('/list_product', [ProductController::class, 'list_product']);
 Route::get('/list_product_status', [ProductController::class, 'list_production_status']);
 Route::get('/list_product_status_change/{id}/{product_status}', [ProductController::class, 'list_product_status_change']);
 
+Route::get('/add_production', [ProductionController::class, 'add_production']);
+Route::post('/add_production', [ProductionController::class, 'add_production_post']);
+
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);
 Route::get('/add_unit', [InventoryController::class, 'add_unit']);

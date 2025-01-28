@@ -35,6 +35,16 @@
             </li>
             <li class="mega-menu mega-menu-sm">
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Production</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="{{url('add_production')}}">Production</a></li>
+                    <!-- <li><a href="{{url('product_category')}}">Product Category</a></li>
+                    <li><a href="{{url('list_product')}}">Product List</a></li> -->
+                </ul>
+            </li>
+            <li class="mega-menu mega-menu-sm">
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                     <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Sale</span>
                 </a>
                 <ul aria-expanded="false">

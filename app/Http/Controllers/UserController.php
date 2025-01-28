@@ -27,7 +27,8 @@ class UserController extends Controller
         //     $items = DB::table('item')->where('item_stock', '<', 10)->orderBy('item_stock', 'asc')->get();
         //     return view('index', compact('sum_qty', 'total_amount', 'customer', 'logs', 'items'));
         // } 
-        if (Session::has('session_id')) {
+        if (Session::has('session_id')) 
+        {
             $sum_qty = DB::table('sale_item')
                 ->selectRaw('SUM(CAST(item_qty AS DECIMAL)) as total_qty')
                 ->value('total_qty');
@@ -38,7 +39,7 @@ class UserController extends Controller
                 ->selectRaw('SUM(CAST(item_amount AS DECIMAL)) as total_amount')
                 ->value('total_amount');
                 
-            $logs = DB::table('logs')->orderBy('created_at', 'desc')->get();
+            $logs = DB::table('logs')->orderBy('created_at', 'desc')->limit(20)->get();
             
             $items = DB::table('item')
                 ->where('item_stock', '<', 10)
