@@ -85,6 +85,7 @@ class ProductionController extends Controller
                     $Pid[]=$temp1;
 
             }
+            // if
             echo "<br>";
                     print_r($Pid);
                     // print_r($result);
