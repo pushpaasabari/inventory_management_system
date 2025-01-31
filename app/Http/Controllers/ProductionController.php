@@ -28,7 +28,7 @@ class ProductionController extends Controller
     public function add_production_post(Request $request)
     {
         echo "<pre>";
-        // print_r($request->all());
+        print_r($request->all());
         // exit();
         // dd($request->all());
 
@@ -60,24 +60,34 @@ class ProductionController extends Controller
                     $temp1 = [];
                     foreach ($ItemQty as $Iqty)
                     {
-                        $temp[]=$ProductQty[$i] * $Iqty;
+                        $temp[$ProductId[$i]]=$ProductQty[$i] * $Iqty;
                     }
                     $result[]= $temp;
-                    for ($j = 0; $j < $length1; $j++)
+                    foreach ($ItemId as $Iid)
                     {
                         $item = DB::table('item')
-                        ->where('id', '=',$ItemId[$j])
+                        ->where('id', '=',$Iid)
                         ->first();
-                        $temp1[]=$item->item_name;
-
+                        // $temp1[$Iid=>$item->item_name]=$item->item_name;
+                        // $temp1[$Iid] = $item->item_name;
+                        $temp1[$Iid] = $temp;
                     }
+                    
+                    // for ($j = 0; $j < $length1; $j++)
+                    // {
+                    //     $item = DB::table('item')
+                    //     ->where('id', '=',$ItemId[$j])
+                    //     ->first();
+                    //     $temp1[]=$item->item_name;
+                    // }
+                    
                     
                     $Pid[]=$temp1;
 
             }
             echo "<br>";
                     print_r($Pid);
-                    print_r($result);
+                    // print_r($result);
 
                 exit();
 
@@ -91,5 +101,83 @@ class ProductionController extends Controller
 
 
     }
+
+
+    // public function add_production_post(Request $request)
+    // {
+    //     echo "<pre>";
+    //     print_r($request->all());
+    //     // exit();
+    //     // dd($request->all());
+
+    //     $request->validate([
+    //         'product_id' => 'required|array',
+    //         'product_category' => 'required',
+    //         'product_qty' => 'required|array'
+    //     ]);
+
+    //     // try {
+    //         $user_type = Session::get('session_name');
+
+    //         // $ProductQty = $request->product_qty; 
+    //         $ProductId = $request->product_id; 
+    //         $ProductQty = $request->product_qty; 
+
+    //         $length = min(count($ProductId), count($ProductQty));
+    //         $result=[];
+    //         $Pid=[];
+    //         for ($i = 0; $i < $length; $i++) {
+
+    //             $product = DB::table('product')
+    //             ->where('id', '=',$ProductId[$i])
+    //             ->first();
+    //             $ItemQty = json_decode($product->item_qty, true);
+    //             $ItemId = json_decode($product->item_id, true);
+    //             $length1=count($ItemId);
+    //                 $temp = [];
+    //                 $temp1 = [];
+    //                 foreach ($ItemQty as $Iqty)
+    //                 {
+    //                     $temp[]=$ProductQty[$i] * $Iqty;
+    //                 }
+    //                 $result[]= $temp;
+    //                 foreach ($ItemId as $Iid)
+    //                 {
+    //                     $item = DB::table('item')
+    //                     ->where('id', '=',$Iid)
+    //                     ->first();
+    //                     // $temp1[$Iid=>$item->item_name]=$item->item_name;
+    //                     // $temp1[$Iid] = $item->item_name;
+    //                     $temp1[$Iid] = $temp;
+    //                 }
+                    
+    //                 // for ($j = 0; $j < $length1; $j++)
+    //                 // {
+    //                 //     $item = DB::table('item')
+    //                 //     ->where('id', '=',$ItemId[$j])
+    //                 //     ->first();
+    //                 //     $temp1[]=$item->item_name;
+    //                 // }
+                    
+                    
+    //                 $Pid[]=$temp1;
+
+    //         }
+    //         echo "<br>";
+    //                 print_r($Pid);
+    //                 // print_r($result);
+
+    //             exit();
+
+                            
+
+    //         return redirect(url('add_production'))->with("success", "Product added successfully");
+
+        
+
+    //         // return redirect(url('add_product'))->with("error", "Product adding Failed, try again");
+
+
+    // }
    
 }
