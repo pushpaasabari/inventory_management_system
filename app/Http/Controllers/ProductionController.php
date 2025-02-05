@@ -102,17 +102,77 @@ class ProductionController extends Controller
         
                 if (isset($ItemQtys[$index])) {
                     // Multiply ItemQty with the corresponding ProductQty
-                    $temp[$item->item_name][$product->product_name] = $ItemQtys[$index] * $currentProductQty;
+                    $temp[$item->id][$product->product_name] = $ItemQtys[$index] * $currentProductQty;
                 }
             }
         }
 
+        // print_r($temp);
+        // echo "<br>";
+
+        // foreach ($temp as $key => $values) {
+        //     $temp[$key] = array_sum($values);
+        //     // $item_stock = DB::table('item')
+        //     //         ->where('id', $temp[$key])
+        //     //         ->first();
+        //     //     echo "$item_stock->item_stock";
+
+        // }
+        // foreach ($temp as $key => $values) {
+        //     // Check if $values is an array and get the correct ID
+        //     $item_id = $key; // Get the first value if it's an array
+        //     $item_values = is_array($values) ? reset($values) : $values; // Get the first value if it's an array
+            
+        //     $item_stock = DB::table('item')
+        //         ->where('id', $item_id) // Use correct item_id
+        //         ->first();
+        
+        //     if ($item_stock) {
+                
+        //         echo "$item_stock->item_name ".":"." $item_stock->item_stock"; // Safe to access
+        //         echo "<br>";
+        //         echo "$item_stock->item_stock - $item_values"; // Safe to access
+        //         echo "<br>";
+        //     } else {
+        //         echo "Item not found for ID: $item_id"; // Handle missing items
+        //         echo "<br>";
+        //     }
+        // }
         foreach ($temp as $key => $values) {
-            $temp[$key] = array_sum($values);
+            // Use key as item ID
+            
+            // $temp[$key] = array_sum($values);
+            $item_id = $key;
+            // If values is an array, take the first value, otherwise use the value itself
+            // $item_values = is_array($values) ? reset($values) : $values;
+        
+            // Fetch item from the database
+            $item_stock = DB::table('item')
+                ->where('id', $item_id)
+                ->first();
+        
+            if ($item_stock) {
+                // Convert both values to numeric before subtraction
+                $stock_qty = (float) $item_stock->item_stock;
+                $item_val = (float) array_sum($values);
+                $remaining_stock = $stock_qty - $item_val;
+        
+                // echo "$item_stock->item_name: $item_stock->item_stock"; // Safe to access
+                // echo "<br>";
+                echo "$item_stock->item_name | $item_stock->item_stock | $item_val | $remaining_stock"; // Safe to access
+                echo "<br>";
+                // echo "$stock_qty - $item_val = $remaining_stock"; // Subtract safely
+                // echo "<br>";
+            } else {
+                echo "Item not found for ID: $item_id"; // Handle missing items
+                echo "<br>";
+            }
         }
         
-        print_r($temp);
-        exit();
+        
+        
+        // print_r($temp);
+        exit(); 
         
         return redirect(url('add_production'))->with("success", "Product added successfully");
     }
