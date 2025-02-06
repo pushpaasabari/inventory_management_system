@@ -138,6 +138,9 @@ class ProductionController extends Controller
         //         echo "<br>";
         //     }
         // }
+printf("%-25s | %-10s | %-10s | %-10s\n", "Item Name", "Stock", "Value", "Remaining Stock");
+                printf("%-25s | %-10s | %-10s | %-10s\n", str_repeat("-", 25), str_repeat("-", 10), str_repeat("-", 10), str_repeat("-", 10));
+
         foreach ($temp as $key => $values) {
             // Use key as item ID
             
@@ -150,6 +153,7 @@ class ProductionController extends Controller
             $item_stock = DB::table('item')
                 ->where('id', $item_id)
                 ->first();
+                
         
             if ($item_stock) {
                 // Convert both values to numeric before subtraction
@@ -159,10 +163,16 @@ class ProductionController extends Controller
         
                 // echo "$item_stock->item_name: $item_stock->item_stock"; // Safe to access
                 // echo "<br>";
-                echo "$item_stock->item_name | $item_stock->item_stock | $item_val | $remaining_stock"; // Safe to access
-                echo "<br>";
+                // echo "$item_stock->item_name | $item_stock->item_stock | $item_val | $remaining_stock"; // Safe to access
+                // echo "<br>";
                 // echo "$stock_qty - $item_val = $remaining_stock"; // Subtract safely
                 // echo "<br>";
+
+                
+
+printf("%-25s | %-10s | %-10s | %-10s\n", $item_stock->item_name, $item_stock->item_stock, $item_val, $remaining_stock);
+                
+
             } else {
                 echo "Item not found for ID: $item_id"; // Handle missing items
                 echo "<br>";

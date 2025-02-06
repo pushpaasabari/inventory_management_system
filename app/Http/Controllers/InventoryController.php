@@ -367,7 +367,9 @@ class InventoryController extends Controller
             $sheet->setCellValue('F1', 'PURCHASE');
             $sheet->setCellValue('G1', 'SALE');
             $sheet->setCellValue('H1', 'DESC');
-            $sheet->setCellValue('I1', 'UNIT');
+            $sheet->setCellValue('I1', 'PRIMARY UNIT');
+            $sheet->setCellValue('J1', 'SECONDARY UNIT');
+            $sheet->setCellValue('K1', 'UNIT CONVERSION');
 
             // Fetch data from the database
             $inventory = DB::table('item')->get();
@@ -382,7 +384,9 @@ class InventoryController extends Controller
                 $sheet->setCellValue('F' . $row, $item->item_purchase);
                 $sheet->setCellValue('G' . $row, $item->item_sale);
                 $sheet->setCellValue('H' . $row, $item->item_desc);
-                $sheet->setCellValue('I' . $row, $item->item_unit);
+                $sheet->setCellValue('I' . $row, $item->unit_primary);
+                $sheet->setCellValue('J' . $row, $item->unit_secondary);
+                $sheet->setCellValue('k' . $row, $item->unit_conversion);
                 $row++;
             }
 
@@ -425,7 +429,9 @@ class InventoryController extends Controller
                 'item_purchase' => $row[5],
                 'item_sale' => $row[6],
                 'item_desc' => $row[7],
-                'item_unit' => $row[8],
+                'unit_primary' => $row[8],
+                'unit_secondary' => $row[9],
+                'unit_conversion' => $row[10],
                 'item_created_at' => Carbon::now(),
                 'item_updated_at' => Carbon::now(),
                 'item_status' => 1
