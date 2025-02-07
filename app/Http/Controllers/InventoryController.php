@@ -456,9 +456,7 @@ class InventoryController extends Controller
     {
         $data = ['list_item' => DB::table('item')->get()];
         $pdf = PDF::loadView('example', $data);
-
         $fileName = 'stock_details_' . date('Ymd_His') . '.pdf';
-
         return $pdf->download($fileName);
     }
 }

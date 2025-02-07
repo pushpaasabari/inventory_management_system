@@ -7,6 +7,7 @@ use DB;
 use Carbon\Carbon;
 use Session;
 use App\Models\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProductionController extends Controller
 {
@@ -167,10 +168,16 @@ printf("%-25s | %-10s | %-10s | %-10s\n", "Item Name", "Stock", "Value", "Remain
                 // echo "<br>";
                 // echo "$stock_qty - $item_val = $remaining_stock"; // Subtract safely
                 // echo "<br>";
+                $items[] = [
+                    'name' => $item_stock->item_name,
+                    'stock' => $item_stock->item_stock,
+                    'value' => $item_val,
+                    'remaining' => $remaining_stock
+                ];
 
                 
 
-printf("%-25s | %-10s | %-10s | %-10s\n", $item_stock->item_name, $item_stock->item_stock, $item_val, $remaining_stock);
+// printf("%-25s | %-10s | %-10s | %-10s\n", $item_stock->item_name, $item_stock->item_stock, $item_val, $remaining_stock);
                 
 
             } else {
@@ -179,12 +186,16 @@ printf("%-25s | %-10s | %-10s | %-10s\n", $item_stock->item_name, $item_stock->i
             }
         }
         
-        
+        $pdf = Pdf::loadView('stock_report', compact('items'))->setPaper('A4', 'portrait');
+
+    ob_end_clean(); // Ensure no output is sent before PDF generation
+    $fileName = 'stock_details_' . date('Ymd_His') . '.pdf';
+    return $pdf->download($fileName);
         
         // print_r($temp);
-        exit(); 
+        // exit(); 
         
-        return redirect(url('add_production'))->with("success", "Product added successfully");
+        // return redirect(url('add_production'))->with("success", "Product added successfully");
     }
 
 
