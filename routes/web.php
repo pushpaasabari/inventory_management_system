@@ -23,6 +23,7 @@ Route::get('/list_product_status_change/{id}/{product_status}', [ProductControll
 
 Route::get('/add_production', [ProductionController::class, 'add_production']);
 Route::post('/add_production', [ProductionController::class, 'add_production_post']);
+Route::get('/print-receipt', [ProductionController::class, 'printReceipt']);
 
 Route::get('/add_item', [InventoryController::class, 'add_item']);
 Route::post('/add_item', [InventoryController::class, 'add_item_post']);

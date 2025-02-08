@@ -8,6 +8,11 @@ use Carbon\Carbon;
 use Session;
 use App\Models\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
 
 class ProductionController extends Controller
 {
@@ -63,7 +68,10 @@ class ProductionController extends Controller
     // }
     public function add_production_post(Request $request)
     {
-        echo "<pre>";
+        // echo "<pre>";
+        $connector = new WindowsPrintConnector("Everycom-58-Series");
+        $printer = new Printer($connector);
+
         $request->validate([
             'product_category' => 'required',
             'product_id' => 'required|array',
@@ -107,173 +115,104 @@ class ProductionController extends Controller
                 }
             }
         }
-
-        // print_r($temp);
-        // echo "<br>";
-
-        // foreach ($temp as $key => $values) {
-        //     $temp[$key] = array_sum($values);
-        //     // $item_stock = DB::table('item')
-        //     //         ->where('id', $temp[$key])
-        //     //         ->first();
-        //     //     echo "$item_stock->item_stock";
-
-        // }
-        // foreach ($temp as $key => $values) {
-        //     // Check if $values is an array and get the correct ID
-        //     $item_id = $key; // Get the first value if it's an array
-        //     $item_values = is_array($values) ? reset($values) : $values; // Get the first value if it's an array
-            
-        //     $item_stock = DB::table('item')
-        //         ->where('id', $item_id) // Use correct item_id
-        //         ->first();
-        
-        //     if ($item_stock) {
-                
-        //         echo "$item_stock->item_name ".":"." $item_stock->item_stock"; // Safe to access
-        //         echo "<br>";
-        //         echo "$item_stock->item_stock - $item_values"; // Safe to access
-        //         echo "<br>";
-        //     } else {
-        //         echo "Item not found for ID: $item_id"; // Handle missing items
-        //         echo "<br>";
-        //     }
-        // }
-printf("%-25s | %-10s | %-10s | %-10s\n", "Item Name", "Stock", "Value", "Remaining Stock");
-                printf("%-25s | %-10s | %-10s | %-10s\n", str_repeat("-", 25), str_repeat("-", 10), str_repeat("-", 10), str_repeat("-", 10));
-
         foreach ($temp as $key => $values) {
-            // Use key as item ID
-            
-            // $temp[$key] = array_sum($values);
             $item_id = $key;
-            // If values is an array, take the first value, otherwise use the value itself
-            // $item_values = is_array($values) ? reset($values) : $values;
-        
-            // Fetch item from the database
             $item_stock = DB::table('item')
                 ->where('id', $item_id)
                 ->first();
-                
-        
             if ($item_stock) {
-                // Convert both values to numeric before subtraction
                 $stock_qty = (float) $item_stock->item_stock;
                 $item_val = (float) array_sum($values);
                 $remaining_stock = $stock_qty - $item_val;
-        
-                // echo "$item_stock->item_name: $item_stock->item_stock"; // Safe to access
-                // echo "<br>";
-                // echo "$item_stock->item_name | $item_stock->item_stock | $item_val | $remaining_stock"; // Safe to access
-                // echo "<br>";
-                // echo "$stock_qty - $item_val = $remaining_stock"; // Subtract safely
-                // echo "<br>";
+
                 $items[] = [
                     'name' => $item_stock->item_name,
                     'stock' => $item_stock->item_stock,
                     'value' => $item_val,
                     'remaining' => $remaining_stock
                 ];
-
-                
-
-// printf("%-25s | %-10s | %-10s | %-10s\n", $item_stock->item_name, $item_stock->item_stock, $item_val, $remaining_stock);
-                
-
             } else {
                 echo "Item not found for ID: $item_id"; // Handle missing items
                 echo "<br>";
             }
         }
         
-        $pdf = Pdf::loadView('stock_report', compact('items'))->setPaper('A4', 'portrait');
-
-    ob_end_clean(); // Ensure no output is sent before PDF generation
-    $fileName = 'stock_details_' . date('Ymd_His') . '.pdf';
-    return $pdf->download($fileName);
-        
-        // print_r($temp);
-        // exit(); 
-        
+        // $pdf = Pdf::loadView('stock_report', compact('items'))->setPaper('A4', 'portrait');
+        // ob_end_clean(); // Ensure no output is sent before PDF generation
+        // $fileName = 'stock_details_' . date('Ymd_His') . '.pdf';
+        // return $pdf->download($fileName);
         // return redirect(url('add_production'))->with("success", "Product added successfully");
+
+
+        $printer->setEmphasis(true);
+        $printer->text("STORE NAME\n");
+        $printer->setEmphasis(false);
+        $printer->text("Date: " . date("Y-m-d H:i:s") . "\n");
+        $printer->text("====================\n");
+
+        foreach ($items as $item) {
+            $printer->text($item['name'] . " " . $item['stock'] . " " . $item['value'] . " " . $item['remaining'] . "\n");
+        }
+        $printer->text("====================\n");
+        $printer->setEmphasis(true);
+        $printer->text("Total: ₹80\n");
+        $printer->setEmphasis(false);
+
+        $printer->feed(2);
+        $printer->cut();
+        $printer->close();
+
+        return "Receipt Printed Successfully";
+
     }
 
+public function printReceipt()
+    {
+        try {
+            // Change 'POS_PRINTER' to your printer's name or use network printer IP
+            $connector = new WindowsPrintConnector("Everycom-58-Series");
+            $printer = new Printer($connector);
 
-    // public function add_production_post(Request $request)
-    // {
-    //     echo "<pre>";
-    //     print_r($request->all());
-    //     // exit();
-    //     // dd($request->all());
+            // Print text
+            $printer->setEmphasis(true);
+            $printer->text("STORE NAME\n");
+            $printer->setEmphasis(false);
+            $printer->text("Date: " . date("Y-m-d H:i:s") . "\n");
+            $printer->text("====================\n");
 
-    //     $request->validate([
-    //         'product_id' => 'required|array',
-    //         'product_category' => 'required',
-    //         'product_qty' => 'required|array'
-    //     ]);
+            // Sample items
+            $items = [
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Apple", "Qty" => 2, "Price" => 50],
+                ["Item" => "Banana", "Qty" => 3, "Price" => 30]
+            ];
 
-    //     // try {
-    //         $user_type = Session::get('session_name');
+            foreach ($items as $item) {
+                $printer->text($item['Item'] . " x" . $item['Qty'] . " - ₹" . $item['Price'] . "\n");
+            }
 
-    //         // $ProductQty = $request->product_qty; 
-    //         $ProductId = $request->product_id; 
-    //         $ProductQty = $request->product_qty; 
+            $printer->text("====================\n");
+            $printer->setEmphasis(true);
+            $printer->text("Total: ₹80\n");
+            $printer->setEmphasis(false);
 
-    //         $length = min(count($ProductId), count($ProductQty));
-    //         $result=[];
-    //         $Pid=[];
-    //         for ($i = 0; $i < $length; $i++) {
+            $printer->feed(2);
+            $printer->cut();
+            $printer->close();
 
-    //             $product = DB::table('product')
-    //             ->where('id', '=',$ProductId[$i])
-    //             ->first();
-    //             $ItemQty = json_decode($product->item_qty, true);
-    //             $ItemId = json_decode($product->item_id, true);
-    //             $length1=count($ItemId);
-    //                 $temp = [];
-    //                 $temp1 = [];
-    //                 foreach ($ItemQty as $Iqty)
-    //                 {
-    //                     $temp[]=$ProductQty[$i] * $Iqty;
-    //                 }
-    //                 $result[]= $temp;
-    //                 foreach ($ItemId as $Iid)
-    //                 {
-    //                     $item = DB::table('item')
-    //                     ->where('id', '=',$Iid)
-    //                     ->first();
-    //                     // $temp1[$Iid=>$item->item_name]=$item->item_name;
-    //                     // $temp1[$Iid] = $item->item_name;
-    //                     $temp1[$Iid] = $temp;
-    //                 }
-                    
-    //                 // for ($j = 0; $j < $length1; $j++)
-    //                 // {
-    //                 //     $item = DB::table('item')
-    //                 //     ->where('id', '=',$ItemId[$j])
-    //                 //     ->first();
-    //                 //     $temp1[]=$item->item_name;
-    //                 // }
-                    
-                    
-    //                 $Pid[]=$temp1;
+            return "Receipt Printed Successfully";
+        } catch (\Exception $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
 
-    //         }
-    //         echo "<br>";
-    //                 print_r($Pid);
-    //                 // print_r($result);
-
-    //             exit();
-
-                            
-
-    //         return redirect(url('add_production'))->with("success", "Product added successfully");
-
-        
-
-    //         // return redirect(url('add_product'))->with("error", "Product adding Failed, try again");
-
-
-    // }
    
 }
