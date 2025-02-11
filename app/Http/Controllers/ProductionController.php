@@ -26,51 +26,17 @@ class ProductionController extends Controller
             //$item = DB::table('item')->where('item_status', 1)->where('item_stock', '>', 0)->get();
 
             return view('add_production', compact('product_category','product'));
+            // return view('add_production', compact('product_category'));
         } else {
             return redirect(url('add_production'))->with("error", "Only Admin's can do Sales");
         }
     }
 
-    // public function add_production_post(Request $request)
-    // {
-    //     echo "<pre>";
-    //     $request->validate([
-    //         'product_category' => 'required',
-    //         'product_id' => 'required|array',
-    //         'product_qty' => 'required|array'
-    //     ]);
-
-    //     $ProductId = $request->product_id; 
-    //     $ProductQty = $request->product_qty; 
-    //     $temp=[];
-    //     foreach($ProductId as $Pid)
-    //     {
-    //     $product = DB::table('product')
-    //         ->where('id', '=',$Pid)
-    //         ->first();
-    //         $ItemId = json_decode($product->item_id, true);
-    //         $ItemQty = json_decode($product->item_qty, true);
-    //         foreach($ItemId as $Iid)
-    //         {
-    //             $item = DB::table('item')
-    //             ->where('id', '=',$Iid)
-    //             ->first();
-    //             foreach($ItemQty as $Iqty)
-    //             {                 
-    //                 $temp[$item->item_name][$product->product_name]=$Iqty;
-    //             }
-    //         }
-            
-    //     }
-    //     print_r($temp);
-    //     exit();
-    //     return redirect(url('add_production'))->with("success", "Product added successfully");
-    // }
+    
     public function add_production_post(Request $request)
     {
-        // echo "<pre>";
-        $connector = new WindowsPrintConnector("Everycom-58-Series");
-        $printer = new Printer($connector);
+        // $connector = new WindowsPrintConnector("Everycom-58-Series");
+        // $printer = new Printer($connector);
 
         $request->validate([
             'product_category' => 'required',
@@ -137,32 +103,32 @@ class ProductionController extends Controller
             }
         }
         
-        // $pdf = Pdf::loadView('stock_report', compact('items'))->setPaper('A4', 'portrait');
-        // ob_end_clean(); // Ensure no output is sent before PDF generation
-        // $fileName = 'stock_details_' . date('Ymd_His') . '.pdf';
-        // return $pdf->download($fileName);
-        // return redirect(url('add_production'))->with("success", "Product added successfully");
+        $pdf = Pdf::loadView('stock_report', compact('items'))->setPaper('A4', 'portrait');
+        ob_end_clean(); // Ensure no output is sent before PDF generation
+        $fileName = 'Stock_Details_' . date('Ymd_His') . '.pdf';
+        return $pdf->download($fileName);
+        return redirect(url('add_production'))->with("success", "Product added successfully");
 
 
-        $printer->setEmphasis(true);
-        $printer->text("STORE NAME\n");
-        $printer->setEmphasis(false);
-        $printer->text("Date: " . date("Y-m-d H:i:s") . "\n");
-        $printer->text("====================\n");
+        // $printer->setEmphasis(true);
+        // $printer->text("STORE NAME\n");
+        // $printer->setEmphasis(false);
+        // $printer->text("Date: " . date("Y-m-d H:i:s") . "\n");
+        // $printer->text("====================\n");
 
-        foreach ($items as $item) {
-            $printer->text($item['name'] . " " . $item['stock'] . " " . $item['value'] . " " . $item['remaining'] . "\n");
-        }
-        $printer->text("====================\n");
-        $printer->setEmphasis(true);
-        $printer->text("Total: ₹80\n");
-        $printer->setEmphasis(false);
+        // foreach ($items as $item) {
+        //     $printer->text($item['name'] . " " . $item['stock'] . " " . $item['value'] . " " . $item['remaining'] . "\n");
+        // }
+        // $printer->text("====================\n");
+        // $printer->setEmphasis(true);
+        // $printer->text("Total: ₹80\n");
+        // $printer->setEmphasis(false);
 
-        $printer->feed(2);
-        $printer->cut();
-        $printer->close();
+        // $printer->feed(2);
+        // $printer->cut();
+        // $printer->close();
 
-        return "Receipt Printed Successfully";
+        // return "Receipt Printed Successfully";
 
     }
 
